@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ByteRings — Developer Tools & Software Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ─── Reset & Base ──────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:        #050507;
+    --bg2:       #0a0a10;
+    --bg3:       #0f0f18;
+    --surface:   #12121c;
+    --surface2:  #1a1a28;
+    --border:    rgba(255,255,255,0.07);
+    --border2:   rgba(255,255,255,0.12);
+    --text:      #f0f0fa;
+    --muted:     #6b7280;
+    --muted2:    #9ca3af;
+    --purple:    #7c3aed;
+    --purple2:   #8b5cf6;
+    --blue:      #3b82f6;
+    --cyan:      #22d3ee;
+    --grad:      linear-gradient(135deg, #7c3aed, #3b82f6);
+    --grad2:     linear-gradient(135deg, #8b5cf6, #22d3ee);
+    --glow:      0 0 60px rgba(124,58,237,0.15);
+    --glow2:     0 0 30px rgba(59,130,246,0.12);
+    --radius:    12px;
+    --radius2:   18px;
+    --font:      'Inter', sans-serif;
+    --mono:      'JetBrains Mono', monospace;
+    --nav-h:     64px;
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  button { cursor: pointer; font-family: var(--font); border: none; }
+  ::selection { background: rgba(124,58,237,0.35); color: var(--text); }
+
+  /* ─── Scrollbar ─────────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 99px; }
+
+  /* ─── Utility ───────────────────────────────────────────────── */
+  .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+  .gradient-text {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gradient-text2 {
+    background: var(--grad2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--purple2);
+    background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.25);
+    padding: 4px 12px; border-radius: 99px;
+  }
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--purple2);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800; line-height: 1.15;
+    letter-spacing: -0.02em; color: var(--text);
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 17px; color: var(--muted2); line-height: 1.7;
+    max-width: 540px;
+  }
+
+  /* ─── Buttons ───────────────────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 22px; border-radius: var(--radius);
+    font-size: 14px; font-weight: 600; letter-spacing: 0.01em;
+    transition: var(--transition); white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--grad); color: #fff;
+    box-shadow: 0 0 24px rgba(124,58,237,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(124,58,237,0.5); }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border2);
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.28); background: rgba(255,255,255,0.04); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent; color: var(--muted2);
+    font-size: 13px; padding: 8px 0; gap: 6px;
+    transition: var(--transition);
+  }
+  .btn-ghost:hover { color: var(--text); gap: 10px; }
+  .btn-ghost .arrow { display: inline-block; transition: transform var(--transition); }
+  .btn-ghost:hover .arrow { transform: translateX(3px); }
+
+  /* ─── Nav ───────────────────────────────────────────────────── */
+  #nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    height: var(--nav-h);
+    display: flex; align-items: center;
+    border-bottom: 1px solid transparent;
+    transition: background 0.4s, border-color 0.4s, backdrop-filter 0.4s;
+  }
+  #nav.scrolled {
+    background: rgba(5,5,7,0.8);
+    border-color: var(--border);
+    backdrop-filter: blur(20px);
+  }
+  #nav .container { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 18px; font-weight: 800; letter-spacing: -0.02em;
+  }
+  .nav-logo-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--grad); display: flex; align-items: center;
+    justify-content: center; font-size: 16px;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 6px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 14px; font-weight: 500; color: var(--muted2);
+    padding: 6px 12px; border-radius: 8px;
+    transition: color var(--transition), background var(--transition);
+  }
+  .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+  .nav-actions { display: flex; align-items: center; gap: 12px; }
+  .nav-cta { padding: 8px 18px; font-size: 13px; }
+
+  /* Mobile nav */
+  .nav-burger {
+    display: none; flex-direction: column; gap: 5px;
+    background: transparent; padding: 6px;
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  .nav-burger span {
+    display: block; width: 20px; height: 2px;
+    background: var(--muted2); border-radius: 2px;
+    transition: var(--transition);
+  }
+  .nav-burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+  .nav-burger.open span:nth-child(2) { opacity: 0; }
+  .nav-burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+  .mobile-menu {
+    display: none; position: fixed; inset: var(--nav-h) 0 0 0; z-index: 998;
+    background: rgba(5,5,7,0.97); backdrop-filter: blur(24px);
+    flex-direction: column; padding: 32px 24px; gap: 8px;
+    transform: translateY(-20px); opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    pointer-events: none;
+  }
+  .mobile-menu.open {
+    display: flex; transform: translateY(0); opacity: 1; pointer-events: all;
+  }
+  .mobile-menu a {
+    font-size: 18px; font-weight: 600; color: var(--muted2);
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+    transition: color var(--transition);
+  }
+  .mobile-menu a:hover { color: var(--text); }
+
+  /* ─── Hero ──────────────────────────────────────────────────── */
+  #hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center;
+    overflow: hidden; padding-top: var(--nav-h);
+  }
+  #hero-canvas {
+    position: absolute; inset: 0; z-index: 0;
+  }
+  .hero-glow {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 500px;
+    background: radial-gradient(ellipse at center,
+      rgba(124,58,237,0.12) 0%,
+      rgba(59,130,246,0.07) 40%,
+      transparent 70%);
+    pointer-events: none; z-index: 1;
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 90%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; align-items: flex-start;
+    max-width: 820px; gap: 28px;
+    padding: 80px 0 100px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600; color: var(--cyan);
+    background: rgba(34,211,238,0.08);
+    border: 1px solid rgba(34,211,238,0.2);
+    padding: 5px 14px 5px 8px; border-radius: 99px;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan); animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .hero-title {
+    font-size: clamp(42px, 8vw, 80px);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .hero-title .line2 { display: block; }
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 20px);
+    color: var(--muted2); line-height: 1.7; max-width: 560px;
+  }
+  .hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .hero-stats {
+    display: flex; gap: 40px; padding-top: 16px;
+    border-top: 1px solid var(--border);
+    width: 100%;
+  }
+  .hero-stat-val {
+    font-size: 28px; font-weight: 800; letter-spacing: -0.02em;
+  }
+  .hero-stat-lbl { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute; bottom: 32px; left: 50%;
+    transform: translateX(-50%); z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--muted); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px; height: 40px; background: var(--border2);
+    position: relative; overflow: hidden;
+  }
+  .scroll-line::after {
+    content: ''; position: absolute; top: -100%; left: 0;
+    width: 100%; height: 50%; background: var(--purple2);
+    animation: scrolldown 2s ease-in-out infinite;
+  }
+  @keyframes scrolldown { 0% { top: -100%; } 100% { top: 200%; } }
+
+  /* ─── Section wrapper ───────────────────────────────────────── */
+  .section { padding: 96px 0; }
+  .section-header { margin-bottom: 56px; }
+  .section-header.center { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .section-header.center .section-sub { margin: 0 auto; }
+
+  /* ─── Divider ───────────────────────────────────────────────── */
+  .divider {
+    height: 1px; background: linear-gradient(90deg, transparent, var(--border2), transparent);
+    margin: 0;
+  }
+
+  /* ─── Products ──────────────────────────────────────────────── */
+  #products { background: var(--bg2); }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
+  .product-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius2); padding: 32px;
+    display: flex; flex-direction: column; gap: 20px;
+    position: relative; overflow: hidden;
+    transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+  }
+  .product-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 1px; background: var(--grad); opacity: 0;
+    transition: opacity var(--transition);
+  }
+  .product-card:hover { border-color: var(--border2); transform: translateY(-4px); box-shadow: 0 24px 48px rgba(0,0,0,0.3), var(--glow); }
+  .product-card:hover::before { opacity: 1; }
+  .product-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; background: rgba(124,58,237,0.12);
+    border: 1px solid rgba(124,58,237,0.2);
+  }
+  .product-header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .product-name { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .product-type { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .badge-soon {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; background: rgba(251,146,60,0.12);
+    color: #fb923c; border: 1px solid rgba(251,146,60,0.25);
+    padding: 3px 10px; border-radius: 99px;
+  }
+  .product-desc { font-size: 15px; color: var(--muted2); line-height: 1.7; flex: 1; }
+  .product-features { display: flex; flex-wrap: wrap; gap: 8px; }
+  .product-tag {
+    font-size: 11px; font-weight: 500; font-family: var(--mono);
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    color: var(--muted2); padding: 3px 10px; border-radius: 6px;
+  }
+  .product-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: auto; }
+
+  /* ─── Services ──────────────────────────────────────────────── */
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .service-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius2); padding: 28px;
+    display: flex; flex-direction: column; gap: 16px;
+    transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    cursor: default;
+  }
+  .service-card:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.25); }
+  .service-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; transition: transform var(--transition);
+  }
+  .service-card:hover .service-icon { transform: scale(1.1) rotate(-3deg); }
+  .s1 { background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.2); }
+  .s2 { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.2); }
+  .s3 { background: rgba(34,211,238,0.10); border: 1px solid rgba(34,211,238,0.2); }
+  .s4 { background: rgba(251,146,60,0.10); border: 1px solid rgba(251,146,60,0.2); }
+  .service-name { font-size: 17px; font-weight: 700; }
+  .service-desc { font-size: 14px; color: var(--muted2); line-height: 1.65; flex: 1; }
+  .service-link { font-size: 13px; color: var(--purple2); font-weight: 500; display: flex; align-items: center; gap: 6px; transition: gap var(--transition); }
+  .service-card:hover .service-link { gap: 10px; }
+
+  /* ─── Work ──────────────────────────────────────────────────── */
+  #work { background: var(--bg2); }
+  .work-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+  .work-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius2); padding: 0;
+    overflow: hidden; position: relative;
+    transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+  }
+  .work-card:hover { border-color: var(--border2); transform: translateY(-4px); box-shadow: 0 24px 48px rgba(0,0,0,0.3); }
+  .work-card.wide { grid-column: span 7; }
+  .work-card.narrow { grid-column: span 5; }
+  .work-card.full { grid-column: span 12; }
+  .work-thumb {
+    height: 220px; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .work-thumb-inner {
+    position: absolute; inset: 0; display: flex;
+    align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 13px; color: rgba(255,255,255,0.25);
+    overflow: hidden;
+  }
+  .wt1 { background: linear-gradient(135deg, #0f0717 0%, #1a0a3b 50%, #0a1535 100%); }
+  .wt2 { background: linear-gradient(135deg, #051015 0%, #0a1e35 50%, #07102a 100%); }
+  .wt3 { background: linear-gradient(135deg, #0a0515 0%, #15083b 40%, #0a1535 100%); }
+  .work-thumb-lines {
+    position: absolute; inset: 0; padding: 20px;
+    display: flex; flex-direction: column; gap: 10px; overflow: hidden;
+  }
+  .wl { height: 1px; background: rgba(255,255,255,0.06); border-radius: 1px; }
+  .wl.accent { background: linear-gradient(90deg, transparent, rgba(124,58,237,0.4), transparent); }
+  .wl.accent2 { background: linear-gradient(90deg, transparent, rgba(59,130,246,0.4), transparent); }
+  .work-badge {
+    position: absolute; top: 16px; left: 16px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--purple2);
+    background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.3);
+    padding: 3px 10px; border-radius: 99px;
+  }
+  .work-content { padding: 24px; }
+  .work-name { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .work-desc { font-size: 14px; color: var(--muted2); line-height: 1.65; margin-bottom: 16px; }
+  .work-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .work-tag {
+    font-size: 11px; font-family: var(--mono);
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    color: var(--muted2); padding: 2px 8px; border-radius: 5px;
+  }
+
+  /* ─── Terminal ──────────────────────────────────────────────── */
+  #terminal-section { background: var(--bg); }
+  .terminal-wrap {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 48px; align-items: center;
+  }
+  .terminal-copy { display: flex; flex-direction: column; gap: 20px; }
+  .terminal-copy .section-sub { max-width: 100%; }
+  .terminal-features { display: flex; flex-direction: column; gap: 12px; }
+  .term-feat {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 14px; color: var(--muted2);
+  }
+  .term-feat-icon {
+    width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px;
+    border-radius: 50%; background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.3);
+    display: flex; align-items: center; justify-content: center; font-size: 10px;
+  }
+
+  .terminal {
+    background: #0d0d14; border: 1px solid var(--border2);
+    border-radius: var(--radius2); overflow: hidden;
+    box-shadow: 0 32px 64px rgba(0,0,0,0.5), var(--glow);
+  }
+  .term-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px; background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .term-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .term-dot.r { background: #ff5f57; }
+  .term-dot.y { background: #febc2e; }
+  .term-dot.g { background: #28c840; }
+  .term-title { flex: 1; text-align: center; font-size: 12px; color: var(--muted); font-family: var(--mono); }
+  .term-body { padding: 24px; font-family: var(--mono); font-size: 13.5px; line-height: 1.9; }
+  .term-line { display: block; }
+  .term-prompt { color: var(--purple2); }
+  .term-cmd { color: var(--cyan); }
+  .term-arg { color: #fb923c; }
+  .term-flag { color: #a78bfa; }
+  .term-out { color: var(--muted2); padding-left: 20px; }
+  .term-out.success { color: #34d399; }
+  .term-out.info { color: var(--cyan); }
+  .term-out.faint { color: #4b5563; }
+  .term-cursor {
+    display: inline-block; width: 8px; height: 14px;
+    background: var(--purple2); border-radius: 1px; margin-left: 2px;
+    vertical-align: middle;
+    animation: blink 1.2s step-end infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* ─── Testimonials ──────────────────────────────────────────── */
+  #testimonials { background: var(--bg3); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .testi-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius2); padding: 28px;
+    display: flex; flex-direction: column; gap: 16px;
+    transition: border-color var(--transition), transform var(--transition);
+  }
+  .testi-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .testi-stars { display: flex; gap: 3px; color: #fbbf24; font-size: 14px; }
+  .testi-quote { font-size: 15px; color: var(--muted2); line-height: 1.7; font-style: italic; }
+  .testi-quote::before { content: '\201C'; color: var(--purple2); font-size: 24px; line-height: 0; vertical-align: -8px; margin-right: 4px; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+  .testi-name { font-size: 14px; font-weight: 600; }
+  .testi-role { font-size: 12px; color: var(--muted); }
+
+  /* ─── CTA ───────────────────────────────────────────────────── */
+  #cta { background: var(--bg); position: relative; overflow: hidden; }
+  .cta-glow {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse at center, rgba(124,58,237,0.15), transparent 70%);
+    pointer-events: none;
+  }
+  .cta-inner {
+    position: relative; z-index: 1;
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: 24px; padding: 64px 48px;
+    text-align: center; display: flex; flex-direction: column;
+    align-items: center; gap: 24px;
+    box-shadow: 0 0 80px rgba(124,58,237,0.1);
+  }
+  .cta-inner::before {
+    content: ''; position: absolute; inset: 0;
+    border-radius: 24px; padding: 1px;
+    background: var(--grad);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    pointer-events: none;
+  }
+  .cta-title { font-size: clamp(28px, 5vw, 44px); font-weight: 800; letter-spacing: -0.025em; }
+  .cta-sub { font-size: 17px; color: var(--muted2); max-width: 480px; line-height: 1.7; }
+  .cta-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+  /* ─── Footer ────────────────────────────────────────────────── */
+  footer {
+    background: var(--bg2); border-top: 1px solid var(--border);
+    padding: 60px 0 32px;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+  .footer-brand { display: flex; flex-direction: column; gap: 16px; }
+  .footer-desc { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 260px; }
+  .footer-col-title { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .footer-links { display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a { font-size: 14px; color: var(--muted2); transition: color var(--transition); }
+  .footer-links a:hover { color: var(--text); }
+  .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-social {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: var(--surface); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--muted);
+    transition: color var(--transition), border-color var(--transition), background var(--transition);
+  }
+  .footer-social:hover { color: var(--text); border-color: var(--border2); background: var(--surface2); }
+
+  /* ─── Section reveal ────────────────────────────────────────── */
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1), transform 0.65s cubic-bezier(0.4,0,0.2,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ─── Responsive ────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .nav-links, .nav-actions { display: none; }
+    .nav-burger { display: flex; }
+    .terminal-wrap { grid-template-columns: 1fr; }
+    .work-card.wide, .work-card.narrow { grid-column: span 12; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+    .products-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .cta-inner { padding: 40px 24px; }
+    .hero-content { padding: 60px 0 80px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─────────────────────────────────────────────────────── -->
+<nav id="nav">
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">⬡</div>
+      ByteRings
+    </a>
+    <ul class="nav-links">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#terminal-section">Tools</a></li>
+      <li><a href="#testimonials">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#cta" class="btn btn-outline nav-cta">Contact</a>
+      <a href="#products" class="btn btn-primary nav-cta">Get Started</a>
+    </div>
+    <button class="nav-burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#products" class="mobile-link">Products</a>
+  <a href="#services" class="mobile-link">Services</a>
+  <a href="#work" class="mobile-link">Work</a>
+  <a href="#terminal-section" class="mobile-link">Tools</a>
+  <a href="#testimonials" class="mobile-link">About</a>
+  <a href="#cta" class="mobile-link">Contact</a>
+  <a href="#products" class="btn btn-primary" style="margin-top: 16px; justify-content: center;">Get Started →</a>
+</div>
+
+<!-- ─── HERO ─────────────────────────────────────────────────────── -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="container">
+    <div class="hero-content">
+      <span class="hero-badge">
+        <span class="dot"></span>
+        Now shipping bgit v1.0 — CLI tool for Git power users
+      </span>
+      <h1 class="hero-title">
+        We build tools<br />
+        <span class="line2 gradient-text">developers love.</span>
+      </h1>
+      <p class="hero-sub">
+        ByteRings is a software studio crafting developer tools, scalable platforms, and intelligent solutions. From CLI utilities to full-stack applications—we ship quality software.
+      </p>
+      <div class="hero-actions">
+        <a href="#products" class="btn btn-primary">
+          <span>Explore Products</span>
+          <span>→</span>
+        </a>
+        <a href="#services" class="btn btn-outline">View Services</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-val gradient-text">2+</div>
+          <div class="hero-stat-lbl">Products shipped</div>
+        </div>
+        <div>
+          <div class="hero-stat-val gradient-text">10k+</div>
+          <div class="hero-stat-lbl">CLI downloads</div>
+        </div>
+        <div>
+          <div class="hero-stat-val gradient-text">4</div>
+          <div class="hero-stat-lbl">Core services</div>
+        </div>
+        <div>
+          <div class="hero-stat-val gradient-text">∞</div>
+          <div class="hero-stat-lbl">Possibilities</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── PRODUCTS ──────────────────────────────────────────────────── -->
+<section id="products" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Our Products</div>
+      <h2 class="section-title">Built for developers,<br /><span class="gradient-text">by developers.</span></h2>
+      <p class="section-sub">Open-source tools and SaaS products crafted with performance and developer experience in mind.</p>
+    </div>
+    <div class="products-grid">
+
+      <!-- bgit -->
+      <div class="product-card reveal reveal-delay-1">
+        <div class="product-header">
+          <div>
+            <div class="product-icon">⚡</div>
+          </div>
+          <div></div>
+        </div>
+        <div>
+          <div class="product-type">CLI Tool · Open Source</div>
+          <div class="product-name">bgit</div>
+        </div>
+        <p class="product-desc">A supercharged Git workflow CLI that streamlines branching, committing, and releasing. Replaces repetitive git commands with smart, composable shortcuts built for speed.</p>
+        <div class="product-features">
+          <span class="product-tag">Rust</span>
+          <span class="product-tag">Git</span>
+          <span class="product-tag">CLI</span>
+          <span class="product-tag">Open Source</span>
+        </div>
+        <div class="product-actions">
+          <a href="#terminal-section" class="btn btn-primary" style="font-size:13px; padding: 9px 18px;">View Demo →</a>
+          <a href="#" class="btn btn-outline" style="font-size:13px; padding: 9px 18px;">GitHub</a>
+        </div>
+      </div>
+
+      <!-- ByteRings CMS -->
+      <div class="product-card reveal reveal-delay-2">
+        <div class="product-header">
+          <div>
+            <div class="product-icon" style="background: rgba(34,211,238,0.1); border-color: rgba(34,211,238,0.25);">🧩</div>
+          </div>
+          <span class="badge-soon">Coming Soon</span>
+        </div>
+        <div>
+          <div class="product-type">SaaS · Headless CMS</div>
+          <div class="product-name">ByteRings CMS</div>
+        </div>
+        <p class="product-desc">A headless content management system designed for developers. Type-safe schemas, real-time collaboration, edge-first delivery, and a clean REST & GraphQL API.</p>
+        <div class="product-features">
+          <span class="product-tag">Next.js</span>
+          <span class="product-tag">GraphQL</span>
+          <span class="product-tag">Edge</span>
+          <span class="product-tag">TypeScript</span>
+        </div>
+        <div class="product-actions">
+          <a href="#cta" class="btn btn-outline" style="font-size:13px; padding: 9px 18px;">Join Waitlist →</a>
+          <a href="#" class="btn btn-ghost">Learn more <span class="arrow">→</span></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── SERVICES ──────────────────────────────────────────────────── -->
+<section id="services" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Services</div>
+      <h2 class="section-title">Everything you need<br /><span class="gradient-text2">to ship faster.</span></h2>
+      <p class="section-sub">From ideation to deployment — we partner with teams to build production-grade software.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-icon s1">🌐</div>
+        <div class="service-name">Web Development</div>
+        <p class="service-desc">Blazing-fast web applications using Next.js, React, and modern tooling. From marketing sites to complex SaaS platforms.</p>
+        <a href="#cta" class="service-link">Get a quote <span>→</span></a>
+      </div>
+
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-icon s2">📱</div>
+        <div class="service-name">App Development</div>
+        <p class="service-desc">Cross-platform mobile apps built with React Native and Expo. Native performance with shared codebases.</p>
+        <a href="#cta" class="service-link">Get a quote <span>→</span></a>
+      </div>
+
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-icon s3">🤖</div>
+        <div class="service-name">AI Solutions</div>
+        <p class="service-desc">LLM integrations, RAG pipelines, and intelligent automation. Bring AI capabilities to your existing product stack.</p>
+        <a href="#cta" class="service-link">Get a quote <span>→</span></a>
+      </div>
+
+      <div class="service-card reveal reveal-delay-4">
+        <div class="service-icon s4">🔧</div>
+        <div class="service-name">Technical Consulting</div>
+        <p class="service-desc">Architecture reviews, code audits, and strategic engineering guidance. We help teams move faster and ship better code.</p>
+        <a href="#cta" class="service-link">Get a quote <span>→</span></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── WORK ───────────────────────────────────────────────────────── -->
+<section id="work" class="section" style="background: var(--bg2);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Featured Work</div>
+      <h2 class="section-title">Selected <span class="gradient-text">projects.</span></h2>
+      <p class="section-sub">A snapshot of things we've built — tools, platforms, and systems running in production.</p>
+    </div>
+    <div class="work-grid">
+
+      <div class="work-card wide reveal reveal-delay-1">
+        <div class="work-thumb wt1">
+          <div class="work-thumb-inner">
+            <div class="work-thumb-lines">
+              <div class="wl"></div><div class="wl accent"></div><div class="wl"></div>
+              <div class="wl"></div><div class="wl"></div><div class="wl accent"></div>
+              <div class="wl"></div><div class="wl accent"></div><div class="wl"></div>
+              <div class="wl"></div><div class="wl"></div>
+            </div>
+            <div style="position: relative; font-family: var(--mono); font-size: 13px; text-align: center; padding: 20px;">
+              <div style="color: var(--purple2); margin-bottom: 10px;">$ bgit commit -m "feat: add smart branching"</div>
+              <div style="color: #34d399;">✓ Staged 12 files · Created branch feat/smart-branching</div>
+              <div style="color: var(--muted2); margin-top: 6px;">Pushed to origin in 0.3s</div>
+            </div>
+          </div>
+          <span class="work-badge">CLI Tool</span>
+        </div>
+        <div class="work-content">
+          <div class="work-name">bgit — Git Workflow CLI</div>
+          <p class="work-desc">An open-source command-line tool that supercharges Git workflows. Used by 10k+ developers to cut down repetitive git operations by 60%.</p>
+          <div class="work-tags">
+            <span class="work-tag">Rust</span>
+            <span class="work-tag">CLI</span>
+            <span class="work-tag">Open Source</span>
+            <span class="work-tag">Git</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-card narrow reveal reveal-delay-2">
+        <div class="work-thumb wt2">
+          <div class="work-thumb-inner">
+            <div class="work-thumb-lines">
+              <div class="wl"></div><div class="wl accent2"></div><div class="wl"></div>
+              <div class="wl"></div><div class="wl accent2"></div><div class="wl"></div>
+              <div class="wl"></div><div class="wl"></div><div class="wl accent2"></div>
+            </div>
+            <div style="position: relative; display: flex; flex-direction: column; gap: 10px; padding: 20px;">
+              <div style="height: 36px; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.2); border-radius: 8px;"></div>
+              <div style="height: 60px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 8px;"></div>
+              <div style="height: 24px; background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.15); border-radius: 6px; width: 70%;"></div>
+            </div>
+          </div>
+          <span class="work-badge">Web Platform</span>
+        </div>
+        <div class="work-content">
+          <div class="work-name">Client Web Platform</div>
+          <p class="work-desc">Full-stack Next.js platform with real-time data, role-based auth, and advanced analytics dashboard.</p>
+          <div class="work-tags">
+            <span class="work-tag">Next.js</span>
+            <span class="work-tag">PostgreSQL</span>
+            <span class="work-tag">Tailwind</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-card full reveal reveal-delay-3">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; height: 100%;">
+          <div class="work-thumb wt3" style="height: 180px;">
+            <div class="work-thumb-inner">
+              <div class="work-thumb-lines">
+                <div class="wl"></div><div class="wl accent"></div><div class="wl accent2"></div>
+                <div class="wl"></div><div class="wl accent"></div><div class="wl"></div>
+              </div>
+              <div style="position: relative; font-family: var(--mono); font-size: 12px; color: var(--muted2); padding: 16px;">
+                <div style="color: var(--cyan);">cron(0 * * * *)</div>
+                <div style="color: #34d399; margin-top: 6px;">→ 847 tasks processed</div>
+                <div style="color: var(--muted); margin-top: 4px;">avg latency: 12ms</div>
+              </div>
+            </div>
+            <span class="work-badge">Automation</span>
+          </div>
+          <div class="work-content" style="display: flex; flex-direction: column; justify-content: center;">
+            <div class="work-name">Automation System</div>
+            <p class="work-desc">Event-driven workflow engine processing 100k+ tasks/day. Built with distributed queues, retry logic, and real-time monitoring.</p>
+            <div class="work-tags" style="margin-top: 12px;">
+              <span class="work-tag">Node.js</span>
+              <span class="work-tag">Redis</span>
+              <span class="work-tag">BullMQ</span>
+              <span class="work-tag">Docker</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── TERMINAL ───────────────────────────────────────────────────── -->
+<section id="terminal-section" class="section">
+  <div class="container">
+    <div class="terminal-wrap">
+
+      <div class="terminal-copy reveal">
+        <div class="section-label">Developer Tools</div>
+        <h2 class="section-title">Meet <span class="gradient-text">bgit.</span></h2>
+        <p class="section-sub">The Git companion that thinks like you do. Smarter branching, faster commits, cleaner history — all from one elegant CLI.</p>
+        <div class="terminal-features">
+          <div class="term-feat">
+            <div class="term-feat-icon">✓</div>
+            <span>Smart branch naming from commit messages</span>
+          </div>
+          <div class="term-feat">
+            <div class="term-feat-icon">✓</div>
+            <span>Interactive rebase shortcuts and conflict resolution hints</span>
+          </div>
+          <div class="term-feat">
+            <div class="term-feat-icon">✓</div>
+            <span>Semantic versioning and changelog generation</span>
+          </div>
+          <div class="term-feat">
+            <div class="term-feat-icon">✓</div>
+            <span>GitHub / GitLab PR creation from the terminal</span>
+          </div>
+          <div class="term-feat">
+            <div class="term-feat-icon">✓</div>
+            <span>Blazing fast — compiled to native binary with Rust</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap;">
+          <a href="#" class="btn btn-primary">Install bgit →</a>
+          <a href="#" class="btn btn-outline">Read Docs</a>
+        </div>
+      </div>
+
+      <div class="terminal reveal reveal-delay-2">
+        <div class="term-bar">
+          <div class="term-dot r"></div>
+          <div class="term-dot y"></div>
+          <div class="term-dot g"></div>
+          <div class="term-title">bgit — zsh</div>
+        </div>
+        <div class="term-body">
+          <span class="term-line"><span class="term-prompt">~/project</span> <span class="term-cmd">bgit</span> <span class="term-arg">init</span></span>
+          <span class="term-line term-out info">⚡ ByteRings bgit v1.0.0 initialized</span>
+          <span class="term-line term-out faint">   Detected: Next.js · TypeScript · pnpm</span>
+          <br />
+          <span class="term-line"><span class="term-prompt">~/project</span> <span class="term-cmd">bgit</span> <span class="term-arg">feat</span> <span class="term-flag">"add user authentication"</span></span>
+          <span class="term-line term-out success">✓ Branch created: feat/add-user-authentication</span>
+          <span class="term-line term-out faint">   Pushed to origin · Tracking upstream</span>
+          <br />
+          <span class="term-line"><span class="term-prompt">~/project</span> <span class="term-cmd">bgit</span> <span class="term-arg">ship</span> <span class="term-flag">--pr</span></span>
+          <span class="term-line term-out">⟳ Running pre-commit checks...</span>
+          <span class="term-line term-out success">✓ 14 files staged · 0 issues found</span>
+          <span class="term-line term-out success">✓ PR created: github.com/org/repo/pull/42</span>
+          <br />
+          <span class="term-line"><span class="term-prompt">~/project</span> <span class="term-cmd">bgit</span> <span class="term-arg">release</span> <span class="term-flag">--minor</span></span>
+          <span class="term-line term-out info">⟳ Bumping version 1.3.0 → 1.4.0</span>
+          <span class="term-line term-out success">✓ CHANGELOG.md updated</span>
+          <span class="term-line term-out success">✓ Tagged v1.4.0 · Released 🚀</span>
+          <br />
+          <span class="term-line"><span class="term-prompt">~/project</span> <span class="term-cursor"></span></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── TESTIMONIALS ──────────────────────────────────────────────── -->
+<section id="testimonials" class="section" style="background: var(--bg3);">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="section-label">Developer Love</div>
+      <h2 class="section-title">What engineers are<br /><span class="gradient-text">saying.</span></h2>
+      <p class="section-sub">Real feedback from developers who use our tools and work with our team.</p>
+    </div>
+    <div class="testimonials-grid">
+
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">bgit replaced at least 15 aliases in my .zshrc. The branch naming alone saves me 30 seconds every commit — it adds up.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background: linear-gradient(135deg, #7c3aed, #3b82f6);">AK</div>
+          <div>
+            <div class="testi-name">Arjun Kapoor</div>
+            <div class="testi-role">Senior Engineer · Razorpay</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">The ByteRings team rebuilt our legacy platform in 8 weeks. The code quality and architecture were far beyond what we expected.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background: linear-gradient(135deg, #0ea5e9, #22d3ee);">SM</div>
+          <div>
+            <div class="testi-name">Sneha Mehta</div>
+            <div class="testi-role">CTO · StartupXYZ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal reveal-delay-3">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">Used bgit ship on a Friday deploy and it just worked. PR created, checks passed, merged — all without leaving the terminal.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">RV</div>
+          <div>
+            <div class="testi-name">Rahul Varma</div>
+            <div class="testi-role">Full-Stack Dev · Freelance</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">Their AI integration work was exceptional. The RAG pipeline they built processes 50k documents with sub-second query times.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background: linear-gradient(135deg, #10b981, #3b82f6);">PJ</div>
+          <div>
+            <div class="testi-name">Priya Joshi</div>
+            <div class="testi-role">ML Engineer · Fintech Co.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">Waiting on the CMS launch. The early preview they showed has the cleanest schema editor I've ever seen in a headless CMS.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">KR</div>
+          <div>
+            <div class="testi-name">Karan Rao</div>
+            <div class="testi-role">Frontend Dev · Agency</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal reveal-delay-3">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">Technical consulting call was worth every rupee. They identified three architecture bottlenecks we'd been struggling with for months.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background: linear-gradient(135deg, #f97316, #ec4899);">AS</div>
+          <div>
+            <div class="testi-name">Amit Shah</div>
+            <div class="testi-role">Engineering Lead · SaaS startup</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── CTA ────────────────────────────────────────────────────────── -->
+<section id="cta" class="section">
+  <div class="container">
+    <div class="cta-glow"></div>
+    <div class="cta-inner reveal">
+      <span class="tag">Ready to build?</span>
+      <h2 class="cta-title">Start shipping<br /><span class="gradient-text">better software.</span></h2>
+      <p class="cta-sub">Whether you want to use our tools, hire our team, or just explore what's possible — we'd love to hear from you.</p>
+      <div class="cta-actions">
+        <a href="mailto:hello@byterings.dev" class="btn btn-primary" style="padding: 13px 28px; font-size: 15px;">
+          Get in Touch →
+        </a>
+        <a href="#products" class="btn btn-outline" style="padding: 13px 28px; font-size: 15px;">
+          Explore Products
+        </a>
+      </div>
+      <p style="font-size: 13px; color: var(--muted); margin-top: -8px;">hello@byterings.dev · Usually respond within 24h</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─────────────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="display: inline-flex;">
+          <div class="nav-logo-icon">⬡</div>
+          ByteRings
+        </a>
+        <p class="footer-desc">A software studio building developer tools and software solutions. Shipping quality code since 2023.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social" title="GitHub">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </a>
+          <a href="#" class="footer-social" title="Twitter">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="#" class="footer-social" title="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Products</div>
+        <div class="footer-links">
+          <a href="#products">bgit CLI</a>
+          <a href="#products">ByteRings CMS</a>
+          <a href="#cta">Join Waitlist</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <div class="footer-links">
+          <a href="#services">Web Development</a>
+          <a href="#services">App Development</a>
+          <a href="#services">AI Solutions</a>
+          <a href="#services">Consulting</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <div class="footer-links">
+          <a href="#work">Our Work</a>
+          <a href="#testimonials">About</a>
+          <a href="#cta">Contact</a>
+          <a href="#">Blog</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 ByteRings. All rights reserved.</span>
+      <span style="font-family: var(--mono); font-size: 11px; color: var(--muted);">v1.0.0 · Built with ❤️ for developers</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── SCRIPTS ────────────────────────────────────────────────────── -->
+<script>
+  /* ── Nav scroll ── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  /* ── Mobile menu ── */
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  document.querySelectorAll('.mobile-link, .mobile-menu .btn').forEach(link => {
+    link.addEventListener('click', () => {
+      burger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  /* ── Section reveal on scroll ── */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  /* ── Hero particle canvas ── */
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  class Particle {
+    constructor() { this.reset(true); }
+    reset(rand = false) {
+      this.x = Math.random() * W;
+      this.y = rand ? Math.random() * H : H + 20;
+      this.size = Math.random() * 1.5 + 0.3;
+      this.speedY = -(Math.random() * 0.4 + 0.1);
+      this.speedX = (Math.random() - 0.5) * 0.15;
+      this.opacity = Math.random() * 0.5 + 0.1;
+      this.color = Math.random() > 0.5 ? '124,58,237' : '59,130,246';
+    }
+    update() {
+      this.y += this.speedY; this.x += this.speedX;
+      if (this.y < -10) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color},${this.opacity})`;
+      ctx.fill();
+    }
+  }
+
+  function initParticles() {
+    particles = Array.from({ length: 80 }, () => new Particle());
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+
+    // Draw faint connecting lines
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 90) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(124,58,237,${0.06 * (1 - dist / 90)})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+
+  resize(); initParticles(); loop();
+  window.addEventListener('resize', () => { resize(); initParticles(); });
+
+  /* ── Terminal typing effect ── */
+  const termLines = document.querySelectorAll('.term-line');
+  termLines.forEach((line, i) => {
+    line.style.opacity = '0';
+    line.style.transition = `opacity 0.3s ease ${0.4 + i * 0.18}s`;
+    setTimeout(() => { line.style.opacity = '1'; }, 100);
+  });
+
+  /* ── Smooth scroll for all anchors ── */
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', e => {
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
