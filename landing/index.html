@@ -4,6 +4,16 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ByteRings — Developer Tools & Software Studio</title>
+<meta name="description" content="ByteRings builds developer tools, scalable platforms, and consulting services. bgit is our CLI for multi-user Git identity management across work, personal, and client accounts." />
+<link rel="canonical" href="https://byterings.com/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="ByteRings — Developer Tools & Software Studio" />
+<meta property="og:description" content="Developer tools, product engineering, and consulting from ByteRings. Explore bgit, our CLI for multi-user Git identity management." />
+<meta property="og:url" content="https://byterings.com/" />
+<meta property="og:site_name" content="ByteRings" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="ByteRings — Developer Tools & Software Studio" />
+<meta name="twitter:description" content="Developer tools, product engineering, and consulting from ByteRings, including bgit for multi-user Git identity management." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -465,9 +475,14 @@
     transition: border-color var(--transition), transform var(--transition);
   }
   .testi-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-  .testi-stars { display: flex; gap: 3px; color: #fbbf24; font-size: 14px; }
-  .testi-quote { font-size: 15px; color: var(--muted2); line-height: 1.7; font-style: italic; }
-  .testi-quote::before { content: '\201C'; color: var(--purple2); font-size: 24px; line-height: 0; vertical-align: -8px; margin-right: 4px; }
+  .testi-stars {
+    display: inline-flex; align-self: flex-start;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--purple2);
+    background: rgba(124,58,237,0.16); border: 1px solid rgba(124,58,237,0.24);
+    padding: 4px 10px; border-radius: 99px;
+  }
+  .testi-quote { font-size: 15px; color: var(--muted2); line-height: 1.7; }
   .testi-author { display: flex; align-items: center; gap: 12px; }
   .testi-avatar {
     width: 38px; height: 38px; border-radius: 50%;
@@ -563,7 +578,7 @@
 <!-- ─── NAV ─────────────────────────────────────────────────────── -->
 <nav id="nav">
   <div class="container">
-    <a href="#" class="nav-logo">
+    <a href="#hero" class="nav-logo">
       <div class="nav-logo-icon">⬡</div>
       ByteRings
     </a>
@@ -604,7 +619,7 @@
     <div class="hero-content">
       <span class="hero-badge">
         <span class="dot"></span>
-        Now shipping bgit v1.0 — CLI tool for Git power users
+        Now shipping bgit v0.3.0 — multi-user Git identity manager
       </span>
       <h1 class="hero-title">
         We build tools<br />
@@ -622,20 +637,20 @@
       </div>
       <div class="hero-stats">
         <div>
-          <div class="hero-stat-val gradient-text">2+</div>
-          <div class="hero-stat-lbl">Products shipped</div>
+          <div class="hero-stat-val gradient-text">1</div>
+          <div class="hero-stat-lbl">Live product</div>
         </div>
         <div>
-          <div class="hero-stat-val gradient-text">10k+</div>
-          <div class="hero-stat-lbl">CLI downloads</div>
+          <div class="hero-stat-val gradient-text">3</div>
+          <div class="hero-stat-lbl">Platforms supported</div>
         </div>
         <div>
           <div class="hero-stat-val gradient-text">4</div>
           <div class="hero-stat-lbl">Core services</div>
         </div>
         <div>
-          <div class="hero-stat-val gradient-text">∞</div>
-          <div class="hero-stat-lbl">Possibilities</div>
+          <div class="hero-stat-val gradient-text">2023</div>
+          <div class="hero-stat-lbl">Building since</div>
         </div>
       </div>
     </div>
@@ -670,7 +685,7 @@
           <div class="product-type">CLI Tool · Open Source</div>
           <div class="product-name">bgit</div>
         </div>
-        <p class="product-desc">A supercharged Git workflow CLI that streamlines branching, committing, and releasing. Replaces repetitive git commands with smart, composable shortcuts built for speed.</p>
+        <p class="product-desc">A CLI for managing multiple Git identities across work, personal, and client accounts. Switch users safely, keep SSH configuration organized, and avoid pushing with the wrong identity.</p>
         <div class="product-features">
           <span class="product-tag">Rust</span>
           <span class="product-tag">Git</span>
@@ -679,7 +694,7 @@
         </div>
         <div class="product-actions">
           <a href="#terminal-section" class="btn btn-primary" style="font-size:13px; padding: 9px 18px;">View Demo →</a>
-          <a href="#" class="btn btn-outline" style="font-size:13px; padding: 9px 18px;">GitHub</a>
+          <a href="https://github.com/byterings/bgit" class="btn btn-outline" style="font-size:13px; padding: 9px 18px;" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
       </div>
 
@@ -704,7 +719,7 @@
         </div>
         <div class="product-actions">
           <a href="#cta" class="btn btn-outline" style="font-size:13px; padding: 9px 18px;">Join Waitlist →</a>
-          <a href="#" class="btn btn-ghost">Learn more <span class="arrow">→</span></a>
+          <a href="#cta" class="btn btn-ghost">Learn more <span class="arrow">→</span></a>
         </div>
       </div>
 
@@ -778,16 +793,16 @@
               <div class="wl"></div><div class="wl"></div>
             </div>
             <div style="position: relative; font-family: var(--mono); font-size: 13px; text-align: center; padding: 20px;">
-              <div style="color: var(--purple2); margin-bottom: 10px;">$ bgit commit -m "feat: add smart branching"</div>
-              <div style="color: #34d399;">✓ Staged 12 files · Created branch feat/smart-branching</div>
-              <div style="color: var(--muted2); margin-top: 6px;">Pushed to origin in 0.3s</div>
+              <div style="color: var(--purple2); margin-bottom: 10px;">$ bgit use work</div>
+              <div style="color: #34d399;">✓ Active identity: work</div>
+              <div style="color: var(--muted2); margin-top: 6px;">Git config and SSH settings updated</div>
             </div>
           </div>
           <span class="work-badge">CLI Tool</span>
         </div>
         <div class="work-content">
-          <div class="work-name">bgit — Git Workflow CLI</div>
-          <p class="work-desc">An open-source command-line tool that supercharges Git workflows. Used by 10k+ developers to cut down repetitive git operations by 60%.</p>
+          <div class="work-name">bgit — Git Identity Manager</div>
+          <p class="work-desc">An open-source command-line tool for switching between Git identities, organizing workspaces, and managing SSH configuration without manual `.gitconfig` edits.</p>
           <div class="work-tags">
             <span class="work-tag">Rust</span>
             <span class="work-tag">CLI</span>
@@ -867,32 +882,32 @@
       <div class="terminal-copy reveal">
         <div class="section-label">Developer Tools</div>
         <h2 class="section-title">Meet <span class="gradient-text">bgit.</span></h2>
-        <p class="section-sub">The Git companion that thinks like you do. Smarter branching, faster commits, cleaner history — all from one elegant CLI.</p>
+        <p class="section-sub">A CLI for developers who juggle multiple Git accounts. Set up identities once, switch between them safely, and keep SSH plus repo ownership rules under control.</p>
         <div class="terminal-features">
           <div class="term-feat">
             <div class="term-feat-icon">✓</div>
-            <span>Smart branch naming from commit messages</span>
+            <span>Switch between work, personal, and client identities with one command</span>
           </div>
           <div class="term-feat">
             <div class="term-feat-icon">✓</div>
-            <span>Interactive rebase shortcuts and conflict resolution hints</span>
+            <span>Workspaces for automatic identity selection by folder</span>
           </div>
           <div class="term-feat">
             <div class="term-feat-icon">✓</div>
-            <span>Semantic versioning and changelog generation</span>
+            <span>Automatic SSH key and configuration management for each identity</span>
           </div>
           <div class="term-feat">
             <div class="term-feat-icon">✓</div>
-            <span>GitHub / GitLab PR creation from the terminal</span>
+            <span>Built-in diagnostics with `bgit doctor` and repair helpers</span>
           </div>
           <div class="term-feat">
             <div class="term-feat-icon">✓</div>
-            <span>Blazing fast — compiled to native binary with Rust</span>
+            <span>Repo binding and normal `git` command compatibility after setup</span>
           </div>
         </div>
         <div style="display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap;">
-          <a href="#" class="btn btn-primary">Install bgit →</a>
-          <a href="#" class="btn btn-outline">Read Docs</a>
+          <a href="https://bgitcli.com/docs/#installation" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Install bgit →</a>
+          <a href="https://bgitcli.com/docs/" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Read Docs</a>
         </div>
       </div>
 
@@ -904,25 +919,26 @@
           <div class="term-title">bgit — zsh</div>
         </div>
         <div class="term-body">
-          <span class="term-line"><span class="term-prompt">~/project</span> <span class="term-cmd">bgit</span> <span class="term-arg">init</span></span>
-          <span class="term-line term-out info">⚡ ByteRings bgit v1.0.0 initialized</span>
-          <span class="term-line term-out faint">   Detected: Next.js · TypeScript · pnpm</span>
+          <span class="term-line"><span class="term-prompt">~</span> <span class="term-cmd">bgit</span> <span class="term-arg">setup</span></span>
+          <span class="term-line term-out info">⚡ bgit setup complete</span>
+          <span class="term-line term-out faint">   Managed SSH config and pre-push checks installed</span>
           <br />
-          <span class="term-line"><span class="term-prompt">~/project</span> <span class="term-cmd">bgit</span> <span class="term-arg">feat</span> <span class="term-flag">"add user authentication"</span></span>
-          <span class="term-line term-out success">✓ Branch created: feat/add-user-authentication</span>
-          <span class="term-line term-out faint">   Pushed to origin · Tracking upstream</span>
+          <span class="term-line"><span class="term-prompt">~</span> <span class="term-cmd">bgit</span> <span class="term-arg">add</span></span>
+          <span class="term-line term-out success">✓ Added identity: work</span>
+          <span class="term-line term-out faint">   Name, email, GitHub username, and SSH key saved</span>
           <br />
-          <span class="term-line"><span class="term-prompt">~/project</span> <span class="term-cmd">bgit</span> <span class="term-arg">ship</span> <span class="term-flag">--pr</span></span>
-          <span class="term-line term-out">⟳ Running pre-commit checks...</span>
-          <span class="term-line term-out success">✓ 14 files staged · 0 issues found</span>
-          <span class="term-line term-out success">✓ PR created: github.com/org/repo/pull/42</span>
+          <span class="term-line"><span class="term-prompt">~/projects/work-app</span> <span class="term-cmd">bgit</span> <span class="term-arg">use</span> <span class="term-flag">work</span></span>
+          <span class="term-line term-out success">✓ Switched to identity: work</span>
+          <span class="term-line term-out faint">   Updated user.name, user.email, and SSH key selection</span>
           <br />
-          <span class="term-line"><span class="term-prompt">~/project</span> <span class="term-cmd">bgit</span> <span class="term-arg">release</span> <span class="term-flag">--minor</span></span>
-          <span class="term-line term-out info">⟳ Bumping version 1.3.0 → 1.4.0</span>
-          <span class="term-line term-out success">✓ CHANGELOG.md updated</span>
-          <span class="term-line term-out success">✓ Tagged v1.4.0 · Released 🚀</span>
+          <span class="term-line"><span class="term-prompt">~/projects/work-app</span> <span class="term-cmd">bgit</span> <span class="term-arg">status</span></span>
+          <span class="term-line term-out info">→ Effective identity: work</span>
+          <span class="term-line term-out faint">   Source: workspace binding · Remote aligned</span>
           <br />
-          <span class="term-line"><span class="term-prompt">~/project</span> <span class="term-cursor"></span></span>
+          <span class="term-line"><span class="term-prompt">~/projects/work-app</span> <span class="term-cmd">bgit</span> <span class="term-arg">doctor</span> <span class="term-flag">--fix</span></span>
+          <span class="term-line term-out success">✓ SSH permissions verified and config checks passed</span>
+          <br />
+          <span class="term-line"><span class="term-prompt">~/projects/work-app</span> <span class="term-cursor"></span></span>
         </div>
       </div>
 
@@ -936,80 +952,80 @@
 <section id="testimonials" class="section" style="background: var(--bg3);">
   <div class="container">
     <div class="section-header center reveal">
-      <div class="section-label">Developer Love</div>
-      <h2 class="section-title">What engineers are<br /><span class="gradient-text">saying.</span></h2>
-      <p class="section-sub">Real feedback from developers who use our tools and work with our team.</p>
+      <div class="section-label">Use Cases</div>
+      <h2 class="section-title">Where teams use<br /><span class="gradient-text">ByteRings.</span></h2>
+      <p class="section-sub">Representative product and service scenarios the team is focused on right now.</p>
     </div>
     <div class="testimonials-grid">
 
       <div class="testi-card reveal reveal-delay-1">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">bgit replaced at least 15 aliases in my .zshrc. The branch naming alone saves me 30 seconds every commit — it adds up.</p>
+        <div class="testi-stars">bgit</div>
+        <p class="testi-quote">Keep work, personal, and client Git identities separate without hand-editing `.gitconfig` or guessing which SSH key Git will use.</p>
         <div class="testi-author">
           <div class="testi-avatar" style="background: linear-gradient(135deg, #7c3aed, #3b82f6);">AK</div>
           <div>
-            <div class="testi-name">Arjun Kapoor</div>
-            <div class="testi-role">Senior Engineer · Razorpay</div>
+            <div class="testi-name">Multi-account Git</div>
+            <div class="testi-role">Identity switching and SSH management</div>
           </div>
         </div>
       </div>
 
       <div class="testi-card reveal reveal-delay-2">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">The ByteRings team rebuilt our legacy platform in 8 weeks. The code quality and architecture were far beyond what we expected.</p>
+        <div class="testi-stars">Platform</div>
+        <p class="testi-quote">Modernize legacy web products with a staged rewrite, stronger architecture boundaries, and production-ready deployment workflows.</p>
         <div class="testi-author">
           <div class="testi-avatar" style="background: linear-gradient(135deg, #0ea5e9, #22d3ee);">SM</div>
           <div>
-            <div class="testi-name">Sneha Mehta</div>
-            <div class="testi-role">CTO · StartupXYZ</div>
+            <div class="testi-name">Web platform rebuilds</div>
+            <div class="testi-role">Next.js, auth, data, and operational hardening</div>
           </div>
         </div>
       </div>
 
       <div class="testi-card reveal reveal-delay-3">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">Used bgit ship on a Friday deploy and it just worked. PR created, checks passed, merged — all without leaving the terminal.</p>
+        <div class="testi-stars">bgit</div>
+        <p class="testi-quote">Use workspace and repo bindings to make the right Git identity apply automatically in each project folder instead of relying on memory.</p>
         <div class="testi-author">
           <div class="testi-avatar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">RV</div>
           <div>
-            <div class="testi-name">Rahul Varma</div>
-            <div class="testi-role">Full-Stack Dev · Freelance</div>
+            <div class="testi-name">Repository safety</div>
+            <div class="testi-role">Workspace rules, bindings, and status checks</div>
           </div>
         </div>
       </div>
 
       <div class="testi-card reveal reveal-delay-1">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">Their AI integration work was exceptional. The RAG pipeline they built processes 50k documents with sub-second query times.</p>
+        <div class="testi-stars">AI</div>
+        <p class="testi-quote">Add retrieval, automation, and LLM-powered workflows to existing products without bolting on fragile prototypes that fail in production.</p>
         <div class="testi-author">
           <div class="testi-avatar" style="background: linear-gradient(135deg, #10b981, #3b82f6);">PJ</div>
           <div>
-            <div class="testi-name">Priya Joshi</div>
-            <div class="testi-role">ML Engineer · Fintech Co.</div>
+            <div class="testi-name">AI product integration</div>
+            <div class="testi-role">RAG, automation, and applied LLM systems</div>
           </div>
         </div>
       </div>
 
       <div class="testi-card reveal reveal-delay-2">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">Waiting on the CMS launch. The early preview they showed has the cleanest schema editor I've ever seen in a headless CMS.</p>
+        <div class="testi-stars">CMS</div>
+        <p class="testi-quote">Prepare developer-focused content tooling with structured schemas, API-first delivery, and cleaner editorial workflows for product teams.</p>
         <div class="testi-author">
           <div class="testi-avatar" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">KR</div>
           <div>
-            <div class="testi-name">Karan Rao</div>
-            <div class="testi-role">Frontend Dev · Agency</div>
+            <div class="testi-name">Content systems</div>
+            <div class="testi-role">Schema design, APIs, and publishing workflows</div>
           </div>
         </div>
       </div>
 
       <div class="testi-card reveal reveal-delay-3">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-quote">Technical consulting call was worth every rupee. They identified three architecture bottlenecks we'd been struggling with for months.</p>
+        <div class="testi-stars">Consulting</div>
+        <p class="testi-quote">Get direct engineering help on architecture bottlenecks, delivery risks, and code quality problems before they become expensive to unwind.</p>
         <div class="testi-author">
           <div class="testi-avatar" style="background: linear-gradient(135deg, #f97316, #ec4899);">AS</div>
           <div>
-            <div class="testi-name">Amit Shah</div>
-            <div class="testi-role">Engineering Lead · SaaS startup</div>
+            <div class="testi-name">Technical consulting</div>
+            <div class="testi-role">Architecture reviews and delivery guidance</div>
           </div>
         </div>
       </div>
@@ -1046,20 +1062,20 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="#" class="nav-logo" style="display: inline-flex;">
+        <a href="#hero" class="nav-logo" style="display: inline-flex;">
           <div class="nav-logo-icon">⬡</div>
           ByteRings
         </a>
         <p class="footer-desc">A software studio building developer tools and software solutions. Shipping quality code since 2023.</p>
         <div class="footer-socials">
-          <a href="#" class="footer-social" title="GitHub">
+          <a href="https://github.com/byterings/bgit" class="footer-social" title="GitHub" aria-label="bgit on GitHub" target="_blank" rel="noopener noreferrer">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
           </a>
-          <a href="#" class="footer-social" title="Twitter">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          <a href="https://byterings.com/" class="footer-social" title="ByteRings website" aria-label="ByteRings website" target="_blank" rel="noopener noreferrer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm6.93 9h-3.16a15.7 15.7 0 00-1.14-5.02A8.03 8.03 0 0118.93 11zM12 4.06c.83 1.2 1.86 3.45 2.11 6.94H9.89C10.14 7.51 11.17 5.26 12 4.06zM9.37 5.98A15.7 15.7 0 008.23 11H5.07a8.03 8.03 0 014.3-5.02zM4.26 13h3.97c.11 1.86.52 3.68 1.14 5.02A8.03 8.03 0 014.26 13zm5.63 0h4.22c-.25 3.49-1.28 5.74-2.11 6.94-.83-1.2-1.86-3.45-2.11-6.94zm4.74 5.02c.62-1.34 1.03-3.16 1.14-5.02h3.97a8.03 8.03 0 01-5.11 5.02z"/></svg>
           </a>
-          <a href="#" class="footer-social" title="LinkedIn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          <a href="mailto:hello@byterings.dev" class="footer-social" title="Email ByteRings" aria-label="Email ByteRings">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1zm0 2v.51l9 5.4 9-5.4V7l-9 5.4L3 7.01z"/></svg>
           </a>
         </div>
       </div>
@@ -1086,13 +1102,13 @@
           <a href="#work">Our Work</a>
           <a href="#testimonials">About</a>
           <a href="#cta">Contact</a>
-          <a href="#">Blog</a>
+          <a href="https://byterings.com/" target="_blank" rel="noopener noreferrer">Blog</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2024 ByteRings. All rights reserved.</span>
-      <span style="font-family: var(--mono); font-size: 11px; color: var(--muted);">v1.0.0 · Built with ❤️ for developers</span>
+      <span>© 2026 ByteRings. All rights reserved.</span>
+      <span style="font-family: var(--mono); font-size: 11px; color: var(--muted);">Updated March 2026 · Built for developers</span>
     </div>
   </div>
 </footer>
@@ -1201,7 +1217,10 @@
   /* ── Smooth scroll for all anchors ── */
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', e => {
-      const target = document.querySelector(anchor.getAttribute('href'));
+      const href = anchor.getAttribute('href');
+      if (!href || href === '#') return;
+
+      const target = document.querySelector(href);
       if (target) {
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
